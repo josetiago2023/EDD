@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <style>
+        /* Adicione estilos simples aqui */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .task-list {
+            margin-top: 20px;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Tarefas</h1>
+    <input type="text" id="taskName" placeholder="Nova tarefa">
+    <input type="date" id="taskDate">
+    <button onclick="addTask()">Adicionar</button>
+    <div class="task-list" id="taskList"></div>
+
+    <script>
+        const taskList = [];
+
+        function addTask() {
+            const name = document.getElementById('taskName').value;
+            const date = document.getElementById('taskDate').value;
+
+            if (name && date) {
+                taskList.push({ name, date });
+                renderTasks();
+            }
+        }
+
+        function renderTasks() {
+            const taskListDiv = document.getElementById('taskList');
+            taskListDiv.innerHTML = '';
+            taskList.forEach((task, index) => {
+                taskListDiv.innerHTML += `
+                    <div class="task">
+                        <span>${task.name} - ${task.date}</span>
+                        <button onclick="deleteTask(${index})">Excluir</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteTask(index) {
+            taskList.splice(index, 1);
+            renderTasks();
+        }
+    </script>
+</body>
+</html>
+
