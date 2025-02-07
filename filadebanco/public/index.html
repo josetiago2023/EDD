@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fila do Banco</title>
+    <script>
+        async function atualizarFila() {
+            const resposta = await fetch('/fila');
+            const dados = await resposta.json();
+            document.getElementById("fila").innerText = JSON.stringify(dados.fila, null, 2);
+        }
+
+        async function atualizarHistorico() {
+            const resposta = await fetch('/historico');
+            const dados = await resposta.json();
+            document.getElementById("historico").innerText = JSON.stringify(dados.historico, null, 2);
+        }
+
+        async function adicionarCliente() {
+            const nome = prompt("Nome do cliente:");
+            const telefone = prompt("Telefone:");
+            const prioridade = parseInt(prompt("Prioridade (número menor = mais prioridade):"));
+
+            await fetch('/adicionar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, telefone, prioridade })
+            });
+
+            atualizarFila();
+        }
+
+        async function chamarCliente() {
+            await fetch('/chamar');
+            atualizarFila();
+            atualizarHistorico();
+        }
+
+        window.onload = function() {
+            atualizarFila();
+            atualizarHistorico();
+        };
+    </script>
+</head>
+<body>
+    <h1>Fila do Banco</h1>
+    <button onclick="adicionarCliente()">Adicionar Cliente</button>
+    <button onclick="chamarCliente()">Chamar Cliente</button>
+    <h2>Fila Atual</h2>
+    <pre id="fila"></pre>
+    <h2>Histórico de Atendidos</h2>
+    <pre id="historico"></pre>
+</body>
+</html>
